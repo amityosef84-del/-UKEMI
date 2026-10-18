@@ -1,0 +1,164 @@
+---
+/**
+ * Image slot. Until a real photo is supplied it renders a branded placeholder that names
+ * the shot and its recommended size. To use a real photo, import it and pass `src` + `alt`:
+ *   import hero from '../assets/images/hero.jpg';
+ *   <Media src={hero} alt="…" label="Hero" />
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  /** What the photo should show — printed on the placeholder. */
+  label: string;
+  /** Recommended source size, e.g. "2400×1600". */
+  size?: string;
+  /** CSS aspect-ratio, e.g. "4 / 5". */
+  ratio?: string;
+  tone?: 'ice' | 'stone' | 'charcoal' | 'growth';
+  src?: ImageMetadata;
+  alt?: string;
+  sizes?: string;
+  /** Parallax strength (0–0.3). Adds over-scan so edges never show. */
+  parallax?: number;
+  /** Reveal style handled by the motion engine. */
+  reveal?: 'mask' | 'up' | 'none';
+  eager?: boolean;
+  class?: string;
+}
+
+const {
+  label,
+  size,
+  ratio = '4 / 5',
+  tone = 'ice',
+  src,
+  alt = '',
+  sizes = '(min-width: 900px) 50vw, 100vw',
+  parallax,
+  reveal = 'mask',
+  eager = false,
+  class: className,
+} = Astro.props;
+---
+
+<figure
+  class:list={['media', `media--${tone}`, { 'media--parallax': parallax }, className]}
+  style={`aspect-ratio: ${ratio}`}
+  data-reveal={reveal === 'none' ? undefined : reveal}
+>
+  <div class="media__inner" data-parallax={parallax}>
+    {
+      src ? (
+        <Image
+          src={src}
+          alt={alt}
+          sizes={sizes}
+          widths={[640, 960, 1280, 1920, 2400]}
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : undefined}
+          class="media__img"
+        />
+      ) : (
+        <div class="ph" aria-hidden="true" />
+      )
+    }
+  </div>
+  {
+    !src && (
+      <figcaption class="ph__meta" aria-hidden="true">
+        <svg class="ph__icon" viewBox="0 0 24 24" fill="none">
+          <path d="M4 7.5h3l1.6-2.2h6.8L17 7.5h3v11H4z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" />
+          <circle cx="12" cy="12.8" r="3.3" stroke="currentColor" stroke-width="1.1" />
+        </svg>
+        <span class="ph__label">{label}</span>
+        {size && <span class="ph__size">{size}</span>}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .media {
+    --ph-a: var(--ice-deep);
+    --ph-b: var(--charcoal);
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--ph-b);
+    isolation: isolate;
+  }
+
+  .media--stone {
+    --ph-a: var(--steel);
+    --ph-b: color-mix(in srgb, var(--charcoal) 80%, var(--steel));
+  }
+
+  .media--charcoal {
+    --ph-a: var(--charcoal-3);
+    --ph-b: var(--charcoal);
+  }
+
+  .media--growth {
+    --ph-a: color-mix(in srgb, var(--growth-deep) 55%, var(--charcoal));
+    --ph-b: var(--charcoal);
+  }
+
+  .media__inner {
+    position: absolute;
+    inset: 0;
+  }
+
+  .media--parallax .media__inner {
+    inset: -12% 0;
+  }
+
+  .media__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ph {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--frost) 16%, transparent) 1px, transparent 1.6px) 0 0 / 22px 22px,
+      radial-gradient(120% 90% at 78% 12%, var(--ph-a), transparent 62%),
+      linear-gradient(160deg, color-mix(in srgb, var(--ph-a) 40%, var(--ph-b)), var(--ph-b));
+  }
+
+  /* The caption stays still while the background drifts with the parallax */
+  .ph__meta {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+    color: color-mix(in srgb, var(--frost) 75%, transparent);
+  }
+
+  .ph__icon {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .ph__label {
+    font-family: var(--font-display);
+    font-stretch: var(--wordmark-stretch);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .ph__size {
+    font-size: var(--fs-xs);
+    opacity: 0.65;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

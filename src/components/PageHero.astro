@@ -1,0 +1,56 @@
+---
+/** Opening band for inner pages. */
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  kanji?: string;
+}
+
+const { eyebrow, title, lead, kanji } = Astro.props;
+---
+
+<section class="page-hero theme-dark">
+  {kanji && <p class="page-hero__kanji jp" aria-hidden="true">{kanji}</p>}
+  <div class="container page-hero__inner">
+    <span class="eyebrow" data-reveal="fade">{eyebrow}</span>
+    <h1 data-split>{title}</h1>
+    {lead && <p class="lead" data-reveal="up" data-delay="0.2">{lead}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    padding-block: calc(var(--header-h) + clamp(4rem, 3rem + 6vw, 9rem)) clamp(3rem, 2rem + 4vw, 6rem);
+    background:
+      radial-gradient(70% 90% at 85% 0%, color-mix(in srgb, var(--ice-deep) 55%, transparent), transparent 70%),
+      var(--bg);
+    color: var(--ink);
+    overflow: hidden;
+  }
+
+  .page-hero__inner {
+    position: relative;
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+
+  .page-hero h1 {
+    max-width: 16ch;
+  }
+
+  .page-hero__kanji {
+    position: absolute;
+    right: -0.05em;
+    bottom: -0.2em;
+    font-size: clamp(10rem, 30vw, 28rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--stone) 22%, transparent);
+    pointer-events: none;
+    user-select: none;
+  }
+</style>

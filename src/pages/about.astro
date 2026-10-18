@@ -1,0 +1,248 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Media from '../components/Media.astro';
+import Mark from '../components/Mark.astro';
+import Marquee from '../components/Marquee.astro';
+import CtaBand from '../components/home/CtaBand.astro';
+import { philosophy, site } from '../data/site';
+---
+
+<BaseLayout
+  title="Our Story"
+  description="Ukemi — the art of falling and rising again. The story, the symbol and the colour philosophy behind UKEMI sadhu boards."
+>
+  <PageHero eyebrow="Our story" title="The art of falling — and rising again." kanji={site.kanji} />
+
+  <section class="section theme-dark">
+    <div class="container meaning">
+      <div class="meaning__word" data-reveal="up">
+        <p class="meaning__jp jp">受身</p>
+        <p class="meaning__roman">u·ke·mi</p>
+        <p class="muted">Japanese · noun</p>
+      </div>
+      <div class="meaning__text">
+        <p class="display meaning__statement" data-words>
+          In the martial arts, ukemi is the art of receiving a fall. It is the first lesson on the mat, and the one that
+          makes every other lesson possible: learn to meet the ground, and you can always rise again.
+        </p>
+        <p class="lead" data-reveal="up">
+          UKEMI brings that idea home. A sadhu board is a daily, chosen moment of discomfort — and a daily proof that you
+          can stay with it, breathe through it and step off stronger than you were.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-light">
+    <div class="container symbol">
+      <div class="symbol__mark" data-reveal="fade">
+        <Mark textured label="The UKEMI symbol" />
+      </div>
+      <div class="symbol__text">
+        <span class="eyebrow">The symbol</span>
+        <h2 data-split>Broken, held, growing.</h2>
+        <ul class="symbol__list" role="list" data-stagger>
+          <li><strong>The crescent</strong> — ice on one side, stone on the other: control and foundation, fractured but holding.</li>
+          <li><strong>The nail</strong> — the practice itself. Simple, sharp, honest.</li>
+          <li><strong>The sprout</strong> — what grows when you stay. Life, rising through the pressure.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-dark">
+    <div class="container">
+      <header class="section-head">
+        <span class="eyebrow">Colour philosophy</span>
+        <h2 data-split>Four colours. Four states.</h2>
+      </header>
+      <div class="states" data-stagger>
+        {
+          philosophy.map((c) => (
+            <article class={`state state--${c.key}`} style={`--swatch:${c.hex}`}>
+              <span class="state__chip" aria-hidden="true" />
+              <p class="state__name">
+                {c.name} <span>{c.hex}</span>
+              </p>
+              <h3>{c.title}</h3>
+              <p class="muted">{c.words}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Marquee items={['Control', 'Foundation', 'Growth', 'Stronger than you’ve ever been']} />
+
+  <section class="section theme-dark">
+    <div class="container founder">
+      <Media label="Founder portrait" size="1600×2000" ratio="4 / 5" tone="stone" parallax={0.12} />
+      <div class="founder__text">
+        <span class="eyebrow">The founder</span>
+        <h2 data-split>Why UKEMI exists.</h2>
+        <p class="todo" data-reveal="up">
+          <strong>Awaiting the brief:</strong> two or three paragraphs in the founder’s own voice — the fall, the practice
+          that helped them rise, and why they started UKEMI. A short signature line closes the section.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .meaning {
+    display: grid;
+    gap: 3rem;
+  }
+
+  @media (min-width: 960px) {
+    .meaning {
+      grid-template-columns: 1fr 2.4fr;
+      gap: 5rem;
+    }
+  }
+
+  .meaning__word {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+  }
+
+  .meaning__jp {
+    font-size: clamp(4rem, 3rem + 4vw, 7rem);
+    line-height: 1;
+  }
+
+  .meaning__roman {
+    font-family: var(--font-display);
+    font-stretch: var(--wordmark-stretch);
+    font-size: var(--fs-lg);
+    letter-spacing: 0.2em;
+    color: var(--highlight);
+  }
+
+  .meaning__text {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .meaning__statement {
+    font-size: var(--fs-xl);
+    line-height: 1.25;
+  }
+
+  .symbol {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  @media (min-width: 960px) {
+    .symbol {
+      grid-template-columns: 1fr 1.2fr;
+      gap: 6rem;
+    }
+  }
+
+  .symbol__mark {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    padding: 14%;
+    border-radius: var(--radius-lg);
+    background: radial-gradient(70% 70% at 50% 45%, var(--ice-deep), var(--charcoal) 75%);
+  }
+
+  .symbol__text {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .symbol__list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    font-size: var(--fs-md);
+    color: var(--ink-soft);
+  }
+
+  .symbol__list strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .states {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .states {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .states {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .state {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    padding: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(170deg, color-mix(in srgb, var(--swatch) 26%, transparent), transparent 70%);
+  }
+
+  .state__chip {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 0.75rem;
+    border-radius: var(--radius);
+    background: var(--swatch);
+    box-shadow:
+      0 0 0 1px var(--line),
+      inset 0 -30px 40px rgba(0, 0, 0, 0.18);
+  }
+
+  .state__name {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--highlight);
+  }
+
+  .state__name span {
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+
+  .founder {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  @media (min-width: 960px) {
+    .founder {
+      grid-template-columns: 5fr 6fr;
+      gap: 6rem;
+    }
+  }
+
+  .founder__text {
+    display: grid;
+    gap: 1.5rem;
+  }
+</style>

@@ -1,0 +1,253 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Arrow from '../../components/Arrow.astro';
+import { site } from '../../data/site';
+
+const boards = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Contact" description="Questions about a board, wholesale and retail enquiries, press — write to UKEMI.">
+  <PageHero
+    eyebrow="Contact"
+    title="Write to us."
+    lead="Questions about a board, your practice, wholesale or press — we answer every message personally."
+  />
+
+  <section class="section theme-dark contact">
+    <div class="container contact__grid">
+      <!-- Netlify Forms: submissions appear in the Netlify dashboard and can be forwarded by email.
+           On another host, point `action` at a form service (e.g. Formspree) instead. -->
+      <form
+        class="form"
+        name="contact"
+        method="POST"
+        action="/contact/thanks/"
+        data-netlify="true"
+        netlify-honeypot="company-website"
+        data-reveal="up"
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <p class="visually-hidden">
+          <label>Leave this empty <input name="company-website" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <fieldset class="form__types">
+          <legend class="form__label">I’m writing about</legend>
+          <label class="chip"><input type="radio" name="type" value="board" checked /> <span>A board</span></label>
+          <label class="chip"><input type="radio" name="type" value="practice" /> <span>My practice</span></label>
+          <label class="chip"><input type="radio" name="type" value="wholesale" /> <span>Wholesale / retail</span></label>
+          <label class="chip"><input type="radio" name="type" value="press" /> <span>Press</span></label>
+        </fieldset>
+
+        <div class="form__row">
+          <label class="field">
+            <span class="form__label">Name</span>
+            <input name="name" type="text" autocomplete="name" required />
+          </label>
+          <label class="field">
+            <span class="form__label">Email</span>
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+        </div>
+
+        <div class="form__row">
+          <label class="field">
+            <span class="form__label">Country</span>
+            <input name="country" type="text" autocomplete="country-name" />
+          </label>
+          <label class="field">
+            <span class="form__label">Board</span>
+            <select name="board" data-board-select>
+              <option value="">Not sure yet</option>
+              {boards.map((b) => <option value={b.id}>{b.data.name} — {b.data.level}</option>)}
+            </select>
+          </label>
+        </div>
+
+        <label class="field">
+          <span class="form__label">Message</span>
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+
+        <button class="btn btn--primary form__submit" type="submit">Send message <Arrow /></button>
+      </form>
+
+      <aside class="contact__aside" data-stagger>
+        <div>
+          <p class="form__label">Email</p>
+          <a class="contact__big" href={`mailto:${site.email}`}>{site.email}</a>
+        </div>
+        <div>
+          <p class="form__label">Wholesale &amp; retail</p>
+          <a class="contact__big" href={`mailto:${site.wholesaleEmail}`}>{site.wholesaleEmail}</a>
+        </div>
+        <div>
+          <p class="form__label">Follow</p>
+          <ul class="contact__social" role="list">
+            {site.social.map((s) => <li><a class="link" href={s.href} rel="noopener">{s.label}</a></li>)}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact__grid {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 6rem);
+  }
+
+  @media (min-width: 960px) {
+    .contact__grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  .form {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .form__row {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .form__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form__label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: var(--font-display);
+    font-stretch: var(--wordmark-stretch);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 0.85rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    font-size: var(--fs-md);
+    transition: border-color var(--dur-fast);
+  }
+
+  .field select {
+    appearance: none;
+    background: linear-gradient(45deg, transparent 50%, var(--ink-soft) 50%) calc(100% - 10px) 55% / 6px 6px no-repeat,
+      linear-gradient(-45deg, transparent 50%, var(--ink-soft) 50%) calc(100% - 4px) 55% / 6px 6px no-repeat;
+  }
+
+  .field select option {
+    background: var(--charcoal);
+  }
+
+  .field textarea {
+    resize: vertical;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .form__types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .form__types legend {
+    width: 100%;
+  }
+
+  .chip {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .chip input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .chip span {
+    display: inline-block;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: var(--fs-sm);
+    color: var(--ink-soft);
+    transition:
+      border-color var(--dur-fast),
+      color var(--dur-fast),
+      background-color var(--dur-fast);
+  }
+
+  .chip input:checked + span {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    color: var(--ink);
+  }
+
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--highlight);
+    outline-offset: 2px;
+  }
+
+  .form__submit {
+    justify-self: start;
+  }
+
+  .contact__aside {
+    display: grid;
+    align-content: start;
+    gap: 2.5rem;
+  }
+
+  .contact__big {
+    font-family: var(--font-display);
+    font-stretch: var(--display-stretch);
+    font-size: var(--fs-lg);
+    word-break: break-word;
+  }
+
+  .contact__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+</style>
+
+<script>
+  // Pre-fill from links such as /contact/?board=kata or /contact/?type=wholesale
+  const params = new URLSearchParams(location.search);
+  const board = params.get('board');
+  const type = params.get('type');
+  const select = document.querySelector<HTMLSelectElement>('[data-board-select]');
+  if (board && select) select.value = board;
+  if (type) {
+    const radio = document.querySelector<HTMLInputElement>(`input[name="type"][value="${CSS.escape(type)}"]`);
+    if (radio) radio.checked = true;
+  }
+</script>

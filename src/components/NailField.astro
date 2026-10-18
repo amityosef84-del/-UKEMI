@@ -1,0 +1,25 @@
+---
+/**
+ * Signature motif: a field of points — the nails of the board — that ripple with the
+ * cursor and the scroll. Rendered on <canvas> by scripts/motion/nailfield.ts.
+ */
+interface Props {
+  /** Dot spacing in CSS px. */
+  gap?: number;
+  class?: string;
+}
+
+const { gap = 26, class: className } = Astro.props;
+---
+
+<canvas class:list={['nailfield', className]} data-nailfield data-gap={gap} aria-hidden="true"></canvas>
+
+<style>
+  .nailfield {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>

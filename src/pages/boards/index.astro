@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import CtaBand from '../../components/home/CtaBand.astro';
+
+const boards = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="The Boards"
+  description="UKEMI sadhu boards — from a forgiving first board to an advanced practice. Precision nails, solid hardwood, finished by hand."
+>
+  <PageHero
+    eyebrow="The collection"
+    title="Choose the board that meets you."
+    lead="Closer spacing spreads the pressure; wider spacing deepens it. Start where you are — the path is long."
+    kanji="道"
+  />
+
+  <section class="section theme-dark collection">
+    <div class="container">
+      <div class="collection__grid" data-stagger>
+        {boards.map((product) => <ProductCard product={product} />)}
+      </div>
+
+      <div class="guide" data-reveal="up">
+        <h2 class="guide__title">Which spacing is right for me?</h2>
+        <dl class="guide__list">
+          <div>
+            <dt>10 mm</dt>
+            <dd>Many points, gentler pressure. The place to begin.</dd>
+          </div>
+          <div>
+            <dt>12 mm</dt>
+            <dd>Balanced intensity for a daily routine.</dd>
+          </div>
+          <div>
+            <dt>15 mm</dt>
+            <dd>Fewer points, deeper pressure. For experienced practice.</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Not sure where to start?" text="Tell us about your practice and we will help you choose." />
+</BaseLayout>
+
+<style>
+  .collection__grid {
+    display: grid;
+    gap: clamp(3rem, 2rem + 3vw, 4.5rem) clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+
+  @media (min-width: 760px) {
+    .collection__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .guide {
+    display: grid;
+    gap: 2rem;
+    margin-top: var(--section-y);
+    padding-top: 3rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 900px) {
+    .guide {
+      grid-template-columns: 1fr 2fr;
+    }
+  }
+
+  .guide__title {
+    font-size: var(--fs-xl);
+  }
+
+  .guide__list {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .guide__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .guide__list dt {
+    font-family: var(--font-display);
+    font-stretch: var(--display-stretch);
+    font-size: var(--fs-xl);
+    color: var(--accent);
+  }
+
+  .guide__list dd {
+    margin-top: 0.5rem;
+    color: var(--ink-soft);
+  }
+</style>

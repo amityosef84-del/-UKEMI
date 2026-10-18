@@ -1,0 +1,173 @@
+---
+import Mark from '../Mark.astro';
+import NailField from '../NailField.astro';
+import { site } from '../../data/site';
+---
+
+<section class="hero theme-dark" data-hero>
+  <NailField class="hero__field" />
+  <div class="hero__glow" aria-hidden="true"></div>
+
+  <div class="hero__stage container">
+    <Mark textured class="hero__mark" />
+    <h1 class="hero__title">
+      <span class="hero__word">UKEMI</span>
+      <span class="visually-hidden"> — sadhu boards</span>
+    </h1>
+    <p class="hero__tagline">{site.tagline}</p>
+  </div>
+
+  <div class="hero__foot container">
+    <p class="hero__kanji"><span class="jp">{site.kanji}</span> The art of falling — and rising again.</p>
+    <a href="#manifesto" class="hero__scroll">Scroll <span aria-hidden="true"></span></a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 100svh;
+    padding-top: var(--header-h);
+    background: var(--bg);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero :global(.hero__field) {
+    z-index: -1;
+    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 20%, transparent 78%);
+    mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 20%, transparent 78%);
+  }
+
+  .hero__glow {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    z-index: -1;
+    width: min(90vw, 900px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--ice-deep) 70%, transparent) 0%, transparent 62%);
+    filter: blur(20px);
+    opacity: 0.85;
+  }
+
+  .hero__stage {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+    text-align: center;
+    will-change: transform, opacity;
+  }
+
+  .hero :global(.hero__mark) {
+    width: clamp(150px, 22vw, 290px);
+    filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.55));
+  }
+
+  .hero__title {
+    margin-top: clamp(0.5rem, 2vw, 1.5rem);
+    font-size: inherit;
+    line-height: 1;
+  }
+
+  .hero__word {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-stretch: var(--wordmark-stretch);
+    font-weight: 600;
+    font-size: clamp(2.75rem, 1rem + 8vw, 7.5rem);
+    letter-spacing: 0.3em;
+    margin-right: -0.3em;
+    line-height: 1;
+    background: linear-gradient(180deg, #f4f5f6 0%, var(--frost) 40%, var(--stone) 78%, var(--steel) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* SplitText wraps letters in their own boxes — keep the metal gradient on each */
+  .hero__word :global(div) {
+    background: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .hero__tagline {
+    font-size: var(--fs-md);
+    font-weight: 300;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+  }
+
+  .hero__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 2rem;
+    padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+    font-size: var(--fs-sm);
+    color: var(--ink-soft);
+  }
+
+  .hero__kanji .jp {
+    margin-right: 0.75em;
+    color: var(--ink);
+  }
+
+  .hero__scroll {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-stretch: var(--wordmark-stretch);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+  }
+
+  .hero__scroll span {
+    position: relative;
+    width: 1px;
+    height: 54px;
+    overflow: hidden;
+    background: var(--line);
+  }
+
+  .hero__scroll span::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--growth);
+    animation: scroll-cue 2.2s var(--ease-in-out) infinite;
+  }
+
+  @keyframes scroll-cue {
+    0% {
+      transform: translateY(-100%);
+    }
+    60%,
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero__kanji {
+      max-width: 22ch;
+    }
+  }
+
+  /* Hidden until the intro timeline reveals them */
+  :global(html.motion) .hero :global(.hero__mark),
+  :global(html.motion) .hero__word,
+  :global(html.motion) .hero__tagline,
+  :global(html.motion) .hero__foot {
+    visibility: hidden;
+  }
+</style>

@@ -1,0 +1,99 @@
+---
+import Media from '../Media.astro';
+
+const pillars = [
+  { title: 'Focus under pressure', body: 'Hold your attention steady while every sense asks you to move.' },
+  { title: 'A ritual of stillness', body: 'A few quiet minutes, the same time every day. Nothing to download.' },
+  { title: 'Grounded, body and mind', body: 'Feel your weight, your feet, the floor — and come back to now.' },
+  { title: 'Resilience you can feel', body: 'Each session proves it again: you can stay with discomfort.' },
+];
+---
+
+<section class="board-intro section theme-light">
+  <div class="container board-intro__grid">
+    <Media
+      class="board-intro__media"
+      label="Lifestyle — bare feet on the board"
+      size="1600×2000"
+      ratio="4 / 5"
+      tone="stone"
+      parallax={0.15}
+    />
+
+    <div class="board-intro__copy">
+      <span class="eyebrow">The tool</span>
+      <h2 data-split>A board of nails. A practice of the mind.</h2>
+      <p class="lead" data-reveal="up">
+        The sadhu board comes from the meditative traditions of India: a plank set with hundreds of evenly spaced nails.
+        You stand on it barefoot, and it asks only one thing of you — stay.
+      </p>
+
+      <ul class="pillars" role="list" data-stagger>
+        {
+          pillars.map((p, i) => (
+            <li class="pillar">
+              <span class="pillar__num">0{i + 1}</span>
+              <h3 class="pillar__title">{p.title}</h3>
+              <p class="pillar__body">{p.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .board-intro__grid {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 6rem);
+    align-items: center;
+  }
+
+  @media (min-width: 960px) {
+    .board-intro__grid {
+      grid-template-columns: 5fr 6fr;
+    }
+  }
+
+  .board-intro__copy {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .pillars {
+    display: grid;
+    gap: 0;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 640px) {
+    .pillars {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 2.5rem;
+    }
+  }
+
+  .pillar {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pillar__num {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.14em;
+    color: var(--highlight);
+  }
+
+  .pillar__title {
+    font-size: var(--fs-md);
+  }
+
+  .pillar__body {
+    font-size: var(--fs-sm);
+    color: var(--ink-soft);
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Mark from '../components/Mark.astro';
+import NailField from '../components/NailField.astro';
+import Arrow from '../components/Arrow.astro';
+---
+
+<BaseLayout title="Page not found" description="This page does not exist.">
+  <section class="lost theme-dark">
+    <NailField class="lost__field" />
+    <div class="container lost__inner">
+      <Mark class="lost__mark" />
+      <p class="eyebrow eyebrow--plain">404</p>
+      <h1 data-split>You fell. Now rise.</h1>
+      <p class="lead" data-reveal="up">The page you were looking for isn’t here — but the path continues.</p>
+      <a href="/" class="btn btn--primary" data-reveal="up" data-delay="0.2">Back to home <Arrow /></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lost {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding-block: calc(var(--header-h) + 3rem) 4rem;
+    background: var(--bg);
+    text-align: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .lost :global(.lost__field) {
+    z-index: -1;
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 10%, transparent 75%);
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, #000 10%, transparent 75%);
+  }
+
+  .lost__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+  }
+
+  .lost :global(.lost__mark) {
+    width: 96px;
+    transform: rotate(180deg);
+    opacity: 0.9;
+  }
+
+  .lost .lead {
+    text-align: center;
+  }
+</style>

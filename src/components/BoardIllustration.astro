@@ -1,0 +1,107 @@
+---
+/**
+ * Stylised top-down render of a sadhu board, generated from the product's nail grid.
+ * Stands in for product photography until real shots arrive. Nails "rise" on reveal.
+ */
+interface Props {
+  cols: number;
+  rows: number;
+  material: 'Copper' | 'Steel' | 'Brass';
+  finish?: 'charcoal' | 'ash' | 'smoked';
+  /** Tilt the board in 3D like a product shot. */
+  tilt?: boolean;
+  class?: string;
+}
+
+const { cols, rows, material, finish = 'charcoal', tilt = true, class: className } = Astro.props;
+
+const s = 10; // nail spacing (viewBox units)
+const pad = 13;
+const r = 2.3;
+const w = (cols - 1) * s + s / 2 + pad * 2;
+const h = (rows - 1) * s + pad * 2;
+
+const nails: { x: number; y: number }[] = [];
+for (let row = 0; row < rows; row++) {
+  for (let col = 0; col < cols; col++) {
+    nails.push({ x: pad + col * s + (row % 2 ? s / 2 : 0), y: pad + row * s });
+  }
+}
+
+const metals = {
+  Copper: ['#f2c3a0', '#c27a4c', '#7a4022'],
+  Steel: ['#f4f5f6', '#9ca1a4', '#4a4f53'],
+  Brass: ['#f6e3a6', '#c9a24a', '#7a5e1f'],
+} as const;
+
+const woods = {
+  charcoal: ['#2b3238', '#14181c', 'rgba(255,255,255,.05)'],
+  ash: ['#c9c6bf', '#9d9992', 'rgba(15,19,23,.10)'],
+  smoked: ['#5b5650', '#2f2c29', 'rgba(255,255,255,.06)'],
+} as const;
+
+const [m0, m1, m2] = metals[material];
+const [w0, w1, grain] = woods[finish];
+const uid = `bd${Math.random().toString(36).slice(2, 8)}`;
+const grainLines = Array.from({ length: Math.round(h / 6) }, (_, i) => {
+  const y = 4 + i * 6 + ((i * 7) % 3);
+  const k = (i % 4) - 1.5;
+  return `M2 ${y} C ${w * 0.3} ${y + k * 1.4}, ${w * 0.6} ${y - k * 1.2}, ${w - 2} ${y + k * 0.6}`;
+});
+---
+
+<div class:list={['board', { 'board--tilt': tilt }, className]} data-board>
+  <svg class="board__svg" viewBox={`0 0 ${w} ${h}`} aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id={`${uid}-wood`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color={w0}></stop>
+        <stop offset="1" stop-color={w1}></stop>
+      </linearGradient>
+      <radialGradient id={`${uid}-nail`} cx=".35" cy=".3" r=".75">
+        <stop offset="0" stop-color={m0}></stop>
+        <stop offset=".45" stop-color={m1}></stop>
+        <stop offset="1" stop-color={m2}></stop>
+      </radialGradient>
+      <filter id={`${uid}-sh`} x="-10%" y="-10%" width="120%" height="120%">
+        <feDropShadow dx=".7" dy=".9" stdDeviation=".45" flood-color="#000" flood-opacity=".55"></feDropShadow>
+      </filter>
+    </defs>
+    <rect width={w} height={h} rx="5" fill={`url(#${uid}-wood)`}></rect>
+    <g fill="none" stroke={grain} stroke-width=".6">
+      {grainLines.map((d) => <path d={d} />)}
+    </g>
+    <rect x=".5" y=".5" width={w - 1} height={h - 1} rx="4.6" fill="none" stroke="rgba(255,255,255,.08)"></rect>
+    <g filter={`url(#${uid}-sh)`} fill={`url(#${uid}-nail)`}>
+      {nails.map((n) => <circle class="board__nail" cx={n.x} cy={n.y} r={r} />)}
+    </g>
+  </svg>
+</div>
+
+<style>
+  .board {
+    position: relative;
+    width: 100%;
+  }
+
+  .board__svg {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+
+  .board--tilt {
+    perspective: 1400px;
+  }
+
+  .board--tilt .board__svg {
+    transform: rotateX(52deg) rotateZ(-26deg);
+    transform-origin: 50% 50%;
+    transition: transform var(--dur-slow) var(--ease-out);
+    filter: drop-shadow(0 30px 28px rgba(0, 0, 0, 0.45));
+  }
+
+  .board__nail {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+</style>

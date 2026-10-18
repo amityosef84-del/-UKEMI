@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Arrow from '../../components/Arrow.astro';
+---
+
+<BaseLayout title="Message sent" description="Thank you for writing to UKEMI.">
+  <PageHero eyebrow="Message sent" title="Thank you." lead="Your message is with us. We will reply personally, usually within two working days.">
+    <a href="/" class="btn" data-reveal="up" data-delay="0.3">Back to home <Arrow /></a>
+  </PageHero>
+</BaseLayout>

@@ -1,0 +1,49 @@
+---
+import { site } from '../../data/site';
+---
+
+<section class="manifesto section theme-dark" id="manifesto">
+  <div class="container manifesto__grid">
+    <div>
+      <span class="eyebrow">Ukemi · {site.kanji}</span>
+    </div>
+    <div>
+      <p class="manifesto__text display" data-words>
+        In judo, the first thing you learn is how to fall. Not to avoid the ground — to meet it, absorb it, and rise
+        again. Every session on the board is a small, chosen fall into discomfort. You stand. You breathe. You rise.
+      </p>
+      <p class="manifesto__sign" data-reveal="up">{site.tagline}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .manifesto__grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 960px) {
+    .manifesto__grid {
+      grid-template-columns: 1fr 3fr;
+      gap: 4rem;
+    }
+  }
+
+  .manifesto__text {
+    font-size: var(--fs-xl);
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+  }
+
+  .manifesto__sign {
+    margin-top: 2.5rem;
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-stretch: var(--wordmark-stretch);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+</style>

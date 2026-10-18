@@ -1,0 +1,69 @@
+---
+import NailField from '../NailField.astro';
+import Arrow from '../Arrow.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = 'Fall. Rise. Repeat.',
+  text = 'Find the board for your practice — or write to us. We answer every message personally.',
+} = Astro.props;
+---
+
+<section class="cta theme-dark">
+  <NailField gap={24} class="cta__field" />
+  <div class="container cta__inner">
+    <span class="eyebrow eyebrow--plain">Begin</span>
+    <h2 class="cta__title" data-split>{title}</h2>
+    <p class="lead" data-reveal="up">{text}</p>
+    <div class="cta__actions" data-reveal="up" data-delay="0.15">
+      <a href="/boards/" class="btn btn--primary">Explore the boards <Arrow /></a>
+      <a href="/contact/" class="btn">Contact us <Arrow /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    padding-block: clamp(6rem, 4rem + 10vw, 12rem);
+    background:
+      radial-gradient(60% 70% at 50% 100%, color-mix(in srgb, var(--ice-deep) 70%, transparent), transparent 75%),
+      var(--bg);
+    color: var(--ink);
+    text-align: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .cta :global(.cta__field) {
+    z-index: -1;
+    -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 50%, #000 15%, transparent 75%);
+    mask-image: radial-gradient(ellipse 60% 70% at 50% 50%, #000 15%, transparent 75%);
+  }
+
+  .cta__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+  }
+
+  .cta__title {
+    font-size: var(--fs-3xl);
+  }
+
+  .cta .lead {
+    text-align: center;
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+</style>

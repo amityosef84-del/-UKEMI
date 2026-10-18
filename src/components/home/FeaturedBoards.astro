@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import ProductCard from '../ProductCard.astro';
+import Arrow from '../Arrow.astro';
+
+const boards = (await getCollection('products', ({ data }) => data.featured)).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section class="featured section theme-dark">
+  <div class="container">
+    <header class="section-head section-head--split">
+      <div>
+        <span class="eyebrow">The boards</span>
+        <h2 data-split>Three boards. One path.</h2>
+      </div>
+      <div class="featured__intro" data-reveal="up">
+        <p class="lead">From your very first minute to a practice that asks everything — choose the board that meets you where you are.</p>
+        <a href="/boards/" class="btn">View all boards <Arrow /></a>
+      </div>
+    </header>
+
+    <div class="featured__grid" data-stagger>
+      {boards.map((product) => <ProductCard product={product} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured__intro {
+    display: grid;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+
+  .featured__grid {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 2vw, 3.5rem) clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+
+  @media (min-width: 760px) {
+    .featured__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

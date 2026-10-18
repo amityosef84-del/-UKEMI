@@ -1,0 +1,377 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BoardIllustration from '../../components/BoardIllustration.astro';
+import Media from '../../components/Media.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import NailField from '../../components/NailField.astro';
+import Arrow from '../../components/Arrow.astro';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const boards = await getCollection('products');
+  return boards.map((product) => ({ params: { slug: product.id }, props: { product } }));
+}
+
+interface Props {
+  product: CollectionEntry<'products'>;
+}
+
+const { product } = Astro.props;
+const p = product.data;
+const { Content } = await render(product);
+const others = (await getCollection('products', (b) => b.id !== product.id)).sort((a, b) => a.data.order - b.data.order);
+
+const buy = p.buyUrl ?? site.whereToBuy[0]?.href;
+const inquire = `/contact/?board=${product.id}`;
+
+const specs = [
+  ['Level', p.level],
+  ['Nails', `${p.nail.material}`],
+  ['Spacing', p.nail.spacing],
+  ['Nail count', p.nail.count],
+  ['Wood', p.wood],
+  ['Dimensions', p.dimensions],
+  ['Weight', p.weight],
+];
+
+const gallery = [
+  { label: 'Front — full board on neutral ground', tone: 'stone' as const },
+  { label: 'Angle — side profile and edge', tone: 'ice' as const },
+  { label: 'Macro — nail heads', tone: 'charcoal' as const },
+  { label: 'In use — standing practice', tone: 'growth' as const },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: `${site.name} ${p.name} sadhu board`,
+  description: p.summary,
+  brand: { '@type': 'Brand', name: site.name },
+  material: `${p.wood}; ${p.nail.material} nails`,
+};
+---
+
+<BaseLayout title={`${p.name} — ${p.level} sadhu board`} description={p.summary} schema={[schema]}>
+  <section class="product theme-dark">
+    <div class="container product__grid">
+      <div class="product__stage">
+        <NailField gap={22} class="product__field" />
+        {
+          p.images[0] ? (
+            <Image src={p.images[0]} alt={`${p.name} sadhu board`} widths={[640, 960, 1400]} sizes="(min-width: 960px) 55vw, 100vw" loading="eager" class="product__photo" />
+          ) : (
+            <BoardIllustration cols={p.grid.cols} rows={p.grid.rows} material={p.nail.material} finish={p.finish} class="product__board" />
+          )
+        }
+      </div>
+
+      <div class="product__info">
+        <a href="/boards/" class="product__back"><Arrow class="product__back-arrow" /> All boards</a>
+        <span class="eyebrow">{p.level}</span>
+        <h1 class="product__name" data-split>
+          {p.name}
+        </h1>
+        {
+          p.kanji && (
+            <p class="product__kanji" data-reveal="fade">
+              <span class="jp">{p.kanji}</span> {p.meaning}
+            </p>
+          )
+        }
+        <p class="product__tagline" data-reveal="up">{p.tagline}</p>
+        <p class="lead" data-reveal="up">{p.summary}</p>
+
+        <div class="product__actions" data-reveal="up" data-delay="0.1">
+          {
+            buy ? (
+              <a href={buy} class="btn btn--primary" rel="noopener" target="_blank">
+                Where to buy <Arrow />
+              </a>
+            ) : (
+              <a href={inquire} class="btn btn--primary">
+                Inquire about {p.name} <Arrow />
+              </a>
+            )
+          }
+          <a href="/practice/" class="btn">How to practise</a>
+        </div>
+
+        <dl class="specs" data-stagger>
+          {
+            specs.map(([k, v]) => (
+              <div class="specs__row">
+                <dt>{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-light">
+    <div class="container story">
+      <div class="story__text">
+        <span class="eyebrow">The board</span>
+        <div class="prose" data-reveal="up">
+          <Content />
+        </div>
+      </div>
+      <div class="story__lists" data-reveal="up" data-delay="0.1">
+        <div>
+          <h2 class="story__h">Highlights</h2>
+          <ul class="ticks" role="list">{p.highlights.map((h) => <li>{h}</li>)}</ul>
+        </div>
+        <div>
+          <h2 class="story__h">In the box</h2>
+          <ul class="ticks" role="list">{p.inTheBox.map((h) => <li>{h}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-dark">
+    <div class="container">
+      <header class="section-head">
+        <span class="eyebrow">Gallery</span>
+        <h2 data-split>Up close.</h2>
+      </header>
+      <div class="gallery">
+        {
+          gallery.map((g, i) => (
+            <Media
+              label={g.label}
+              size={i === 0 ? '2400×1600' : '1600×2000'}
+              ratio={i === 0 ? '3 / 2' : '4 / 5'}
+              tone={g.tone}
+              class={i === 0 ? 'gallery__wide' : undefined}
+              parallax={0.1}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-dark related">
+    <div class="container">
+      <header class="section-head">
+        <span class="eyebrow">Continue the path</span>
+        <h2 data-split>Other boards</h2>
+      </header>
+      <div class="related__grid" data-stagger>
+        {others.map((o) => <ProductCard product={o} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .product {
+    padding-block: calc(var(--header-h) + 2rem) var(--section-y);
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .product__grid {
+    display: grid;
+    gap: clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 960px) {
+    .product__grid {
+      grid-template-columns: 7fr 5fr;
+    }
+  }
+
+  .product__stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    padding: 10%;
+    border-radius: var(--radius-lg);
+    background: radial-gradient(70% 60% at 50% 50%, color-mix(in srgb, var(--ice-deep) 65%, transparent), transparent 75%), var(--surface);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .product__stage :global(.product__field) {
+    z-index: -1;
+    opacity: 0.8;
+  }
+
+  .product__stage :global(.product__board) {
+    width: 95%;
+  }
+
+  .product__photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product__info {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+
+  .product__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: var(--fs-sm);
+    color: var(--ink-soft);
+  }
+
+  .product__back :global(.product__back-arrow) {
+    width: 1rem;
+    transform: rotate(180deg);
+  }
+
+  .product__name {
+    font-size: var(--fs-hero);
+    line-height: 0.9;
+  }
+
+  .product__kanji {
+    font-size: var(--fs-md);
+    color: var(--ink-soft);
+  }
+
+  .product__kanji .jp {
+    margin-right: 0.5em;
+    color: var(--ink);
+  }
+
+  .product__tagline {
+    font-family: var(--font-display);
+    font-stretch: var(--display-stretch);
+    font-size: var(--fs-lg);
+    color: var(--accent);
+  }
+
+  .product__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-block: 0.5rem 1rem;
+  }
+
+  .specs {
+    width: 100%;
+    border-top: 1px solid var(--line);
+  }
+
+  .specs__row {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--fs-sm);
+  }
+
+  .specs dt {
+    color: var(--ink-soft);
+  }
+
+  .story {
+    display: grid;
+    gap: 3rem;
+  }
+
+  @media (min-width: 960px) {
+    .story {
+      grid-template-columns: 3fr 2fr;
+      gap: 6rem;
+    }
+  }
+
+  .story__text {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  .prose {
+    display: grid;
+    gap: 1.25rem;
+    font-size: var(--fs-md);
+    line-height: 1.7;
+  }
+
+  .prose :global(p:first-child) {
+    font-family: var(--font-display);
+    font-stretch: var(--display-stretch);
+    font-size: var(--fs-xl);
+    line-height: 1.25;
+  }
+
+  .story__lists {
+    display: grid;
+    gap: 2.5rem;
+    align-content: start;
+  }
+
+  .story__h {
+    margin-bottom: 1rem;
+    font-size: var(--fs-md);
+  }
+
+  .ticks {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .ticks li {
+    display: grid;
+    grid-template-columns: 1.25rem 1fr;
+    gap: 0.5rem;
+    color: var(--ink-soft);
+  }
+
+  .ticks li::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    margin-top: 0.6em;
+    border-radius: 50%;
+    background: var(--growth);
+  }
+
+  .gallery {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  @media (min-width: 760px) {
+    .gallery {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .gallery :global(.gallery__wide) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .related__grid {
+    display: grid;
+    gap: 3rem 2.5rem;
+  }
+
+  @media (min-width: 760px) {
+    .related__grid {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 960px;
+    }
+  }
+</style>

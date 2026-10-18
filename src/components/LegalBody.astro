@@ -1,0 +1,28 @@
+---
+/** Shared wrapper for legal pages. */
+---
+
+<section class="section theme-dark">
+  <div class="container legal">
+    <p class="todo">
+      <strong>Template text.</strong> Have this page drafted or reviewed by a legal professional for every market UKEMI sells in
+      (e.g. GDPR for the EU/UK, CCPA for California) before launch.
+    </p>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .legal {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 760px;
+    color: var(--ink-soft);
+  }
+
+  .legal :global(h2) {
+    margin-top: 2rem;
+    font-size: var(--fs-lg);
+    color: var(--ink);
+  }
+</style>

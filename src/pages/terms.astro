@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import LegalBody from '../components/LegalBody.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="Terms of Use" description="Terms of use for the UKEMI website.">
+  <PageHero eyebrow="Legal" title="Terms of Use" />
+  <LegalBody>
+    <p>Last updated: [date]</p>
+    <h2>About this site</h2>
+    <p>This website presents {site.name} products for information only. No purchases are made on this site.</p>
+    <h2>Health information</h2>
+    <p>
+      Content on this site is general information, not medical advice. {site.name} boards are wellness tools, not medical
+      devices. Consult a medical professional before starting a new practice.
+    </p>
+    <h2>Intellectual property</h2>
+    <p>All text, images, the {site.name} name and symbol belong to [legal entity name] and may not be used without permission.</p>
+    <h2>Contact</h2>
+    <p><a class="link" href={`mailto:${site.email}`}>{site.email}</a></p>
+  </LegalBody>
+</BaseLayout>

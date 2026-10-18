@@ -1,0 +1,97 @@
+---
+import Media from '../Media.astro';
+
+const steps = [
+  {
+    label: 'Close-up — wood grain and edge',
+    title: 'Selected hardwood',
+    body: 'Solid boards, dried slowly and finished by hand so they last for years of daily use.',
+    tone: 'stone' as const,
+  },
+  {
+    label: 'Macro — nail heads in rows',
+    title: 'Precision-set nails',
+    body: 'Every nail set to the same height and spacing — so the pressure is even, and honest.',
+    tone: 'ice' as const,
+  },
+  {
+    label: 'Workshop — hands finishing a board',
+    title: 'Finished by hand',
+    body: 'Inspected one by one before it leaves the workshop. Made to be stood on.',
+    tone: 'charcoal' as const,
+  },
+];
+---
+
+<section class="craft section theme-dark">
+  <div class="container">
+    <header class="section-head section-head--split">
+      <div>
+        <span class="eyebrow">Craft</span>
+        <h2 data-split>Made to be stood on.</h2>
+      </div>
+      <p class="lead" data-reveal="up">
+        Simple objects have nowhere to hide. Every UKEMI board is built from a few honest materials, put together with
+        care. <span class="todo-inline">[Materials story — to be completed from the brief]</span>
+      </p>
+    </header>
+
+    <div class="craft__grid">
+      {
+        steps.map((s, i) => (
+          <article class="craft__item" style={`--i:${i}`}>
+            <Media label={s.label} size="1600×2000" ratio="4 / 5" tone={s.tone} parallax={0.12} />
+            <div class="craft__text" data-reveal="up">
+              <span class="craft__num">/0{i + 1}</span>
+              <h3>{s.title}</h3>
+              <p class="muted">{s.body}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .craft__grid {
+    display: grid;
+    gap: clamp(3rem, 2rem + 3vw, 4rem) clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+
+  @media (min-width: 760px) {
+    .craft__grid {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: start;
+    }
+
+    /* A gentle stagger in height makes the row feel composed rather than gridded */
+    .craft__item:nth-child(2) {
+      margin-top: clamp(3rem, 8vw, 8rem);
+    }
+
+    .craft__item:nth-child(3) {
+      margin-top: clamp(1.5rem, 4vw, 4rem);
+    }
+  }
+
+  .craft__item {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .craft__text {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .craft__num {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.14em;
+    color: var(--highlight);
+  }
+
+  .todo-inline {
+    color: color-mix(in srgb, var(--accent) 80%, var(--ink-soft));
+  }
+</style>

@@ -1,0 +1,317 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Media from '../components/Media.astro';
+import CtaBand from '../components/home/CtaBand.astro';
+
+const steps = [
+  { title: 'Prepare', body: 'Place the board on a firm, flat floor. Quiet room, phone away. Keep a chair or wall within reach.' },
+  { title: 'Breathe', body: 'Stand beside the board. Three slow breaths — longer out than in.' },
+  { title: 'Step on', body: 'One foot, then the other, holding the support. Let your weight arrive slowly.' },
+  { title: 'Stay', body: 'Begin with one or two minutes. Breathe into the sensation instead of away from it.' },
+  { title: 'Rise', body: 'Step off with support and sit. Notice your feet, your breath, your mind. That is the practice.' },
+];
+
+const weeks = [
+  ['Week 1', '1–2 minutes', 'Socks on if you need them. Learn to breathe through it.'],
+  ['Week 2', '2–3 minutes', 'Bare feet. Same time every day.'],
+  ['Week 3', '3–5 minutes', 'Eyes closed, hands free when you feel steady.'],
+  ['Week 4+', '5–10 minutes', 'Your practice. Add stillness, not force.'],
+];
+
+const faq = [
+  {
+    q: 'Does it hurt?',
+    a: 'Yes — at first. The sensation is intense and then softens as you breathe and stay. Work with it, never against it: if it is too much, step off.',
+  },
+  {
+    q: 'How long should I stand?',
+    a: 'Start with one or two minutes and build gradually. Consistency matters far more than duration.',
+  },
+  {
+    q: 'Copper or steel nails?',
+    a: 'Both are durable and precise. Steel stays bright; copper develops a warm patina over time. Choose by feel and look.',
+  },
+  {
+    q: 'Which spacing should I choose?',
+    a: 'Closer spacing (10 mm) spreads the pressure across more points and suits beginners. Wider spacing (12–15 mm) is more intense.',
+  },
+  {
+    q: 'How do I care for my board?',
+    a: 'Wipe the nails with a dry or slightly damp cloth after use, keep it out of direct moisture and store it in its bag.',
+  },
+];
+---
+
+<BaseLayout
+  title="The Practice"
+  description="How to practise on a sadhu board: your first session, a four-week progression, safety guidance and answers to common questions."
+>
+  <PageHero
+    eyebrow="The practice"
+    title="Stand. Breathe. Stay. Rise."
+    lead="A practice of a few minutes a day. No equipment beyond the board, no experience needed — only the willingness to stay."
+    kanji="練"
+  />
+
+  <section class="section theme-dark">
+    <div class="container steps-wrap">
+      <div class="steps-wrap__media">
+        <Media label="Practice — person standing on the board, calm interior" size="1600×2000" ratio="4 / 5" tone="ice" parallax={0.14} />
+      </div>
+      <div>
+        <header class="section-head">
+          <span class="eyebrow">Your first session</span>
+          <h2 data-split>Five steps.</h2>
+        </header>
+        <ol class="steps" role="list" data-stagger>
+          {
+            steps.map((s, i) => (
+              <li class="step">
+                <span class="step__num">0{i + 1}</span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p class="muted">{s.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-light">
+    <div class="container">
+      <header class="section-head section-head--split">
+        <div>
+          <span class="eyebrow">Progression</span>
+          <h2 data-split>Build slowly.</h2>
+        </div>
+        <p class="lead" data-reveal="up">A suggested first month. Listen to your body — it sets the pace, not the calendar.</p>
+      </header>
+      <div class="weeks" role="table" aria-label="Four-week progression" data-stagger>
+        {
+          weeks.map(([w, d, n]) => (
+            <div class="weeks__row" role="row">
+              <span role="cell" class="weeks__w">{w}</span>
+              <span role="cell" class="weeks__d">{d}</span>
+              <span role="cell" class="weeks__n">{n}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-dark">
+    <div class="container faq-wrap">
+      <header class="section-head">
+        <span class="eyebrow">Questions</span>
+        <h2 data-split>Before you begin.</h2>
+      </header>
+      <div class="faq" data-stagger>
+        {
+          faq.map((f) => (
+            <details class="faq__item">
+              <summary>
+                {f.q}
+                <span class="faq__icon" aria-hidden="true" />
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section theme-ice safety" id="safety">
+    <div class="container safety__grid">
+      <div>
+        <span class="eyebrow">Safety</span>
+        <h2 data-split>Practise with care.</h2>
+      </div>
+      <div class="safety__text" data-reveal="up">
+        <p>
+          Do not use a sadhu board without first consulting a medical professional if you are pregnant, have diabetes or
+          reduced sensation in your feet, a blood-clotting disorder, take blood-thinning medication, or have wounds,
+          infections or skin conditions on your feet. This list is not exhaustive.
+        </p>
+        <p>
+          UKEMI boards are wellness tools, not medical devices. Nothing on this site is medical advice, and our boards
+          are not intended to diagnose, treat, cure or prevent any condition.
+        </p>
+        <p class="todo"><strong>To review:</strong> final safety copy should be checked for each target market before launch.</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Ready for your first minute?" />
+</BaseLayout>
+
+<style>
+  .steps-wrap {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 6rem);
+    align-items: start;
+  }
+
+  @media (min-width: 960px) {
+    .steps-wrap {
+      grid-template-columns: 5fr 6fr;
+    }
+
+    .steps-wrap__media {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+
+  .steps {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 1rem;
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .step h3 {
+    margin-bottom: 0.4rem;
+  }
+
+  .step__num {
+    font-family: var(--font-display);
+    font-stretch: var(--display-stretch);
+    font-size: var(--fs-lg);
+    color: var(--accent);
+  }
+
+  .weeks {
+    border-top: 1px solid var(--line);
+  }
+
+  .weeks__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.25rem 2rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  @media (min-width: 760px) {
+    .weeks__row {
+      grid-template-columns: 10rem 12rem 1fr;
+      align-items: baseline;
+    }
+  }
+
+  .weeks__w {
+    font-family: var(--font-display);
+    font-stretch: var(--display-stretch);
+    font-size: var(--fs-lg);
+  }
+
+  .weeks__d {
+    color: var(--highlight);
+    font-weight: 600;
+  }
+
+  .weeks__n {
+    color: var(--ink-soft);
+  }
+
+  .faq-wrap {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 960px) {
+    .faq-wrap {
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+    }
+  }
+
+  .faq {
+    border-top: 1px solid var(--line);
+  }
+
+  .faq__item {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .faq__item summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+    font-family: var(--font-display);
+    font-stretch: var(--display-stretch);
+    font-size: var(--fs-md);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+  }
+
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: var(--accent);
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .faq__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .faq__item[open] .faq__icon::after {
+    transform: rotate(0);
+  }
+
+  .faq__item p {
+    max-width: 60ch;
+    padding-bottom: 1.5rem;
+    color: var(--ink-soft);
+  }
+
+  .safety__grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 960px) {
+    .safety__grid {
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+    }
+  }
+
+  .safety__text {
+    display: grid;
+    gap: 1.25rem;
+    font-size: var(--fs-md);
+    color: var(--ink-soft);
+  }
+</style>

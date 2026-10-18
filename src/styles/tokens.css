@@ -1,0 +1,102 @@
+/* ==========================================================================
+   UKEMI — design tokens
+   The single place to change brand colours, fonts, spacing and motion.
+   ========================================================================== */
+
+:root {
+  /* ---- Brand palette ------------------------------------------------------ */
+  --charcoal: #0f1317; /* Primary background — the fight, the pain, the uncertainty */
+  --steel: #565b5e; /* Dark steel grey */
+  --stone: #9ca1a4; /* Stone — foundation, stability, endurance */
+  --ice-deep: #344a59; /* Ice — control, composure, discipline */
+  --ice: #6e8d9f; /* Ice blue */
+  --mist: #597688; /* Mist blue */
+  --frost: #d5d6d8; /* Cold white */
+  --growth: #7a9e39; /* Accent — hope, evolution, life */
+  --growth-deep: #6d8f2a;
+
+  /* Derived shades (mixed from the palette, never new hues) */
+  --charcoal-2: color-mix(in srgb, var(--charcoal) 86%, var(--ice-deep));
+  --charcoal-3: color-mix(in srgb, var(--charcoal) 70%, var(--ice-deep));
+  --frost-2: color-mix(in srgb, var(--frost) 80%, white);
+
+  /* ---- Roles (dark is the default theme) ---------------------------------- */
+  --bg: var(--charcoal);
+  --surface: var(--charcoal-2);
+  --ink: var(--frost);
+  --ink-soft: var(--stone);
+  --ink-mute: var(--steel); /* decoration only — not for body text */
+  --accent: var(--growth);
+  --accent-ink: var(--charcoal); /* text on top of --accent */
+  --highlight: var(--ice);
+  --line: color-mix(in srgb, var(--frost) 13%, transparent);
+
+  /* ---- Typography --------------------------------------------------------- */
+  --font-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-jp: 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif;
+  --display-stretch: 118%;
+  --wordmark-stretch: 125%;
+
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: clamp(1.0625rem, 0.98rem + 0.35vw, 1.25rem);
+  --fs-lg: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --fs-xl: clamp(1.625rem, 1.3rem + 1.5vw, 2.5rem);
+  --fs-2xl: clamp(2.125rem, 1.5rem + 3vw, 4rem);
+  --fs-3xl: clamp(2.5rem, 1.4rem + 5.2vw, 6rem);
+  --fs-hero: clamp(2.75rem, 1rem + 8.5vw, 8.5rem);
+
+  --tracking-wide: 0.18em;
+  --tracking-wider: 0.32em;
+
+  /* ---- Layout ------------------------------------------------------------- */
+  --container: 1440px;
+  --gutter: clamp(16px, 4vw, 56px);
+  --section-y: clamp(5rem, 3rem + 9vw, 11rem);
+  --radius-sm: 4px;
+  --radius: 10px;
+  --radius-lg: 22px;
+  --header-h: 76px;
+
+  /* ---- Motion ------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 220ms;
+  --dur: 520ms;
+  --dur-slow: 900ms;
+}
+
+/* ---- Section themes ------------------------------------------------------- */
+.theme-dark {
+  --bg: var(--charcoal);
+  --surface: var(--charcoal-2);
+  --ink: var(--frost);
+  --ink-soft: var(--stone);
+  --accent: var(--growth);
+  --highlight: var(--ice);
+  --line: color-mix(in srgb, var(--frost) 13%, transparent);
+}
+
+.theme-ice {
+  --bg: var(--ice-deep);
+  --surface: color-mix(in srgb, var(--ice-deep) 80%, var(--charcoal));
+  --ink: var(--frost);
+  --ink-soft: color-mix(in srgb, var(--frost) 78%, var(--ice));
+  --accent: var(--growth);
+  --highlight: var(--frost);
+  --line: color-mix(in srgb, var(--frost) 20%, transparent);
+}
+
+.theme-light {
+  --bg: var(--frost);
+  --surface: var(--frost-2);
+  --ink: var(--charcoal);
+  --ink-soft: var(--steel);
+  --ink-mute: var(--stone);
+  --accent: var(--ice-deep); /* green fails contrast on frost — keep it decorative here */
+  --accent-ink: var(--frost);
+  --highlight: var(--ice-deep);
+  --line: color-mix(in srgb, var(--charcoal) 14%, transparent);
+}

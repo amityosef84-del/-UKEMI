@@ -1,0 +1,77 @@
+---
+/** Infinite ribbon of words; speed and direction follow the scroll (see scripts/motion/sections.ts). */
+interface Props {
+  items: string[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+const run = [...items, ...items];
+---
+
+<div class:list={['marquee', className]} data-marquee aria-hidden="true">
+  <div class="marquee__track" data-marquee-track>
+    {
+      [0, 1].map(() => (
+        <div class="marquee__group">
+          {run.map((word, i) => (
+            <span class:list={['marquee__item', { 'marquee__item--solid': i % 2 === 0 }]}>
+              {word}
+              <svg class="marquee__dot" viewBox="0 0 10 10">
+                <circle cx="5" cy="5" r="2.2" />
+              </svg>
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    padding-block: clamp(1.5rem, 1rem + 2vw, 2.75rem);
+    border-block: 1px solid var(--line);
+    background: var(--bg);
+    user-select: none;
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .marquee__group {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding-right: clamp(1.5rem, 3vw, 3rem);
+    font-family: var(--font-display);
+    font-stretch: var(--wordmark-stretch);
+    font-size: clamp(2.5rem, 1.5rem + 5vw, 6.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--stone) 70%, transparent);
+  }
+
+  .marquee__item--solid {
+    color: var(--ink);
+    -webkit-text-stroke: 0;
+  }
+
+  .marquee__dot {
+    width: 0.35em;
+    height: 0.35em;
+    fill: var(--growth);
+  }
+</style>

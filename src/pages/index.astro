@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import Manifesto from '../components/home/Manifesto.astro';
+import Path from '../components/home/Path.astro';
+import TheBoard from '../components/home/TheBoard.astro';
+import FeaturedBoards from '../components/home/FeaturedBoards.astro';
+import Craft from '../components/home/Craft.astro';
+import Testimonials from '../components/home/Testimonials.astro';
+import CtaBand from '../components/home/CtaBand.astro';
+import Marquee from '../components/Marquee.astro';
+---
+
+<BaseLayout>
+  <Hero />
+  <Manifesto />
+  <Path />
+  <TheBoard />
+  <FeaturedBoards />
+  <Marquee items={['Ground', 'Breathe', 'Endure', 'Rise']} />
+  <Craft />
+  <Testimonials />
+  <CtaBand />
+</BaseLayout>

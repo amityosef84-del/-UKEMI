@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import LegalBody from '../components/LegalBody.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="Privacy Policy" description="How UKEMI collects and uses personal information.">
+  <PageHero eyebrow="Legal" title="Privacy Policy" />
+  <LegalBody>
+    <p>Last updated: [date]</p>
+    <h2>Who we are</h2>
+    <p>{site.name} ([legal entity name, address]). Contact: <a class="link" href={`mailto:${site.email}`}>{site.email}</a>.</p>
+    <h2>What we collect</h2>
+    <p>
+      This website has no shop and no user accounts. We only collect what you send us through the contact form (name,
+      email, country, message) and anonymous usage statistics if analytics are enabled.
+    </p>
+    <h2>How we use it</h2>
+    <p>To answer your message, and — only with your consent — to send you news from {site.name}.</p>
+    <h2>Your rights</h2>
+    <p>You can ask us to access, correct or delete your data at any time by email.</p>
+    <h2>Cookies</h2>
+    <p>[Describe cookies / analytics once the tools are chosen.]</p>
+  </LegalBody>
+</BaseLayout>

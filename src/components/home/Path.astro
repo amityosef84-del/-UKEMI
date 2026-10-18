@@ -1,0 +1,208 @@
+---
+import Mark from '../Mark.astro';
+import { philosophy } from '../../data/site';
+---
+
+<section class="path theme-dark" data-path aria-labelledby="path-title">
+  <div class="path__bg" aria-hidden="true">
+    <div class="path__glow"></div>
+  </div>
+
+  <div class="path__inner container">
+    <div class="path__visual">
+      <Mark textured class="path__mark" />
+    </div>
+
+    <div class="path__chapters">
+      <header class="path__head">
+        <span class="eyebrow">The four states</span>
+        <h2 id="path-title" data-split>Every practice moves through four states.</h2>
+      </header>
+      {
+        philosophy.map((c, i) => (
+          <article class="path__chapter" data-chapter style={`--swatch:${c.hex}`}>
+            <p class="path__num">
+              0{i + 1} <span>{c.name}</span>
+            </p>
+            <h3 class="path__title">{c.title}</h3>
+            <p class="path__words">{c.words}</p>
+            <p class="path__body">{c.body}</p>
+            <p class="path__swatch">
+              <span aria-hidden="true" />
+              {c.hex}
+            </p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .path {
+    position: relative;
+    color: var(--ink);
+    isolation: isolate;
+  }
+
+  .path__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--charcoal);
+    overflow: hidden;
+  }
+
+  .path__glow {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    opacity: 0;
+    background: radial-gradient(50% 45% at 30% 55%, color-mix(in srgb, var(--growth) 26%, transparent), transparent 70%);
+  }
+
+  .path__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 960px) {
+    .path__inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  .path__visual {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    height: 100svh;
+  }
+
+  .path :global(.path__mark) {
+    width: min(78%, 420px);
+    filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.5));
+  }
+
+  .path__chapters {
+    position: relative;
+    z-index: 1;
+  }
+
+  .path__head {
+    display: grid;
+    align-content: center;
+    gap: 1.5rem;
+    min-height: 70vh;
+    padding-top: var(--section-y);
+  }
+
+  .path__chapter {
+    display: grid;
+    align-content: center;
+    gap: 1rem;
+    min-height: 100vh;
+    min-height: 100svh;
+    transition: opacity var(--dur-slow) var(--ease-out);
+  }
+
+  .path.is-live .path__chapter {
+    opacity: 0.22;
+  }
+
+  .path.is-live .path__chapter:global(.is-active) {
+    opacity: 1;
+  }
+
+  .path__num {
+    display: flex;
+    gap: 1rem;
+    font-family: var(--font-display);
+    font-stretch: var(--wordmark-stretch);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--highlight);
+  }
+
+  .path__num span {
+    color: var(--ink-soft);
+  }
+
+  .path__title {
+    font-size: var(--fs-3xl);
+    line-height: 0.95;
+  }
+
+  .path__words {
+    font-size: var(--fs-lg);
+    color: var(--ink);
+  }
+
+  .path__body {
+    max-width: 34ch;
+    font-size: var(--fs-md);
+    color: var(--ink-soft);
+  }
+
+  .path__swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .path__swatch span {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--swatch);
+    box-shadow:
+      0 0 0 1px var(--line),
+      inset 0 -6px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Mobile: the mark sits above, chapters glide over it on glass cards */
+  @media (max-width: 959px) {
+    .path__visual {
+      height: 55svh;
+      top: var(--header-h);
+      align-items: start;
+      padding-top: 1rem;
+    }
+
+    .path :global(.path__mark) {
+      width: min(56%, 260px);
+    }
+
+    .path__chapters {
+      margin-top: -20svh;
+    }
+
+    .path__head {
+      min-height: auto;
+      padding-top: 0;
+      padding-bottom: 30svh;
+    }
+
+    .path__chapter {
+      min-height: 90svh;
+      align-content: end;
+      padding-bottom: 12svh;
+    }
+
+    /* Chapters leave before they reach the mark above them */
+    .path.is-live .path__chapter {
+      opacity: 0;
+    }
+  }
+</style>
