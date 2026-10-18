@@ -83,3 +83,7 @@ Page transitions use native cross-document View Transitions (no JS).
 The output is plain static files in `dist/`. The contact form is set up for **Netlify Forms**
 (`data-netlify="true"`); on another host, point the form `action` at a form service such as Formspree.
 Set the production domain in `astro.config.mjs` (`SITE_URL`) and `public/robots.txt`.
+
+**"Powered by Netlify" badge** — Netlify adds this badge to new Free-plan projects; it is not part of
+this codebase. Turn it off in the Netlify dashboard: *Project configuration → General → Powered by
+Netlify badge*. It takes effect on the next request, without a redeploy.

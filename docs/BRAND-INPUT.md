@@ -61,4 +61,5 @@
 - [ ] דומיין. לאחר שייקבע, מעדכנים אותו ב-`astro.config.mjs` וב-`public/robots.txt`
 - [ ] לאיזה אימייל יגיעו פניות מהטופס
 - [ ] אנליטיקס (GA4 / Plausible) וניוזלטר, אם רוצים
-- [ ] הוסטינג: Netlify (הטופס כבר מוגדר עבורו) או Vercel
+- [x] הוסטינג: Netlify (הטופס כבר מוגדר עבורו)
+- [ ] לכבות את התג "Powered by Netlify". התג מתווסף על ידי Netlify לפרויקטים חדשים בתוכנית Free, והוא לא חלק מהקוד. מכבים אותו ב-Netlify: **Project configuration ← General ← Powered by Netlify badge**. השינוי חל מיד, בלי deploy מחדש
