@@ -1,6 +1,12 @@
 ---
-import Mark from '../Mark.astro';
+import { getImage } from 'astro:assets';
 import { philosophy } from '../../data/site';
+import symbol from '../../assets/brand/ukemi-symbol.png';
+
+// The symbol is stacked four times: a dim base, then the ice half, the stone half and the
+// nail-and-sprout strip, each revealed by its own chapter (scripts/motion/path.ts).
+const sym = await getImage({ src: symbol, width: symbol.width, format: 'webp' });
+const layers = ['base', 'ice', 'stone', 'growth'];
 ---
 
 <section class="path theme-dark" data-path aria-labelledby="path-title">
@@ -10,7 +16,23 @@ import { philosophy } from '../../data/site';
 
   <div class="path__inner container">
     <div class="path__visual">
-      <Mark textured class="path__mark" />
+      <div class="path__mark" data-path-mark>
+        {
+          layers.map((layer) => (
+            <img
+              src={sym.src}
+              width={sym.attributes.width}
+              height={sym.attributes.height}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              class={`path__layer path__layer--${layer}`}
+              data-layer={layer}
+            />
+          ))
+        }
+      </div>
     </div>
 
     <div class="path__chapters">
@@ -83,9 +105,38 @@ import { philosophy } from '../../data/site';
     height: 100svh;
   }
 
-  .path :global(.path__mark) {
-    width: min(78%, 420px);
-    filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.5));
+  .path__mark {
+    position: relative;
+    width: min(70%, 400px);
+    filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.55));
+  }
+
+  .path__layer {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .path__layer:not(.path__layer--base) {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Without the motion engine the layers simply add up to the full-colour symbol */
+  .path__layer--base {
+    filter: grayscale(1) brightness(0.4);
+  }
+
+  .path__layer--ice {
+    clip-path: polygon(0% 0%, 36% 0%, 36% 76%, 46% 76%, 46% 100%, 0% 100%);
+  }
+
+  .path__layer--stone {
+    clip-path: polygon(66% 0%, 100% 0%, 100% 100%, 56% 100%, 56% 76%, 66% 76%);
+  }
+
+  .path__layer--growth {
+    clip-path: polygon(36% 0%, 66% 0%, 66% 76%, 56% 76%, 56% 100%, 46% 100%, 46% 76%, 36% 76%);
   }
 
   .path__chapters {
@@ -180,8 +231,8 @@ import { philosophy } from '../../data/site';
       padding-top: 1rem;
     }
 
-    .path :global(.path__mark) {
-      width: min(56%, 260px);
+    .path__mark {
+      width: min(52%, 240px);
     }
 
     .path__chapters {

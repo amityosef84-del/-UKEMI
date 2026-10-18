@@ -48,9 +48,14 @@ Astro generates responsive AVIF/WebP versions automatically.
 Product photos go in the `images` list (paths relative to the Markdown file); until then a board
 illustration is generated from the `grid` values.
 
-**Replace the logo** — the symbol is drawn in `src/components/Mark.astro` (an interim vector rendition).
-Its parts carry classes (`.mark-ice`, `.mark-stone`, `.mark-nail`, `.mark-stem`, `.mark-leaf`) used by the
-hero and "four states" animations — keep them when swapping in the official SVG. Also update `public/favicon.svg`.
+**Logo** — the original artwork lives in `brand-assets/logo/`. The cut-out versions used by the site
+(`src/assets/brand/ukemi-symbol.png`, `ukemi-wordmark.png`) were made with `brand-assets/logo/matte.py`,
+which removes the dark backdrop of the renders. Favicons and `public/logo.png` are generated from the symbol.
+
+**Photos by name** — any image saved in `src/assets/images/` is picked up by its file name
+(`src/data/photos.ts`). Slots already wired: `feet-on-stone`, `wood-grain`, `nails-macro`, `workshop-hands`
+(home), `stillness`, `meditation` (practice), `ukemi-fall`, `founder` (about). A missing file simply keeps
+the placeholder.
 
 ## Motion
 
@@ -66,8 +71,8 @@ Pages opt into motion with data attributes; no per-page JavaScript is needed.
 | `data-parallax="0.15"` | Layered parallax                                    |
 | `data-delay="0.2"`     | Extra delay for a reveal                            |
 
-Signature pieces: the hero mark assembling itself, the "four states" section where the mark lights up
-colour by colour, the nail-field canvas that ripples with cursor and scroll, nails rising on the board
+Signature pieces: the hero emblem surfacing with a sweep of light across the metal, the "four states"
+section where the symbol lights up layer by layer (ice, stone, then the nail and sprout rising), the nail-field canvas that ripples with cursor and scroll, nails rising on the board
 illustrations, and a marquee that follows scroll speed and direction.
 
 Visitors who prefer reduced motion get a static, fully visible page; without JavaScript everything is visible too.

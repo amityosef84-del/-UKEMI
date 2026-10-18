@@ -1,20 +1,27 @@
 ---
 import Media from '../Media.astro';
+import { photo } from '../../data/photos';
 
 const steps = [
   {
+    photo: 'wood-grain',
+    alt: 'Macro of dark smoked hardwood grain at the edge of a plank',
     label: 'Close-up — wood grain and edge',
     title: 'Selected hardwood',
     body: 'Solid boards, dried slowly and finished by hand so they last for years of daily use.',
     tone: 'stone' as const,
   },
   {
+    photo: 'nails-macro',
+    alt: 'Rows of precision-set nail heads',
     label: 'Macro — nail heads in rows',
     title: 'Precision-set nails',
     body: 'Every nail set to the same height and spacing — so the pressure is even, and honest.',
     tone: 'ice' as const,
   },
   {
+    photo: 'workshop-hands',
+    alt: 'A craftsman’s hands sanding the edge of a dark hardwood plank',
     label: 'Workshop — hands finishing a board',
     title: 'Finished by hand',
     body: 'Inspected one by one before it leaves the workshop. Made to be stood on.',
@@ -40,7 +47,7 @@ const steps = [
       {
         steps.map((s, i) => (
           <article class="craft__item" style={`--i:${i}`}>
-            <Media label={s.label} size="1600×2000" ratio="4 / 5" tone={s.tone} parallax={0.12} />
+            <Media src={photo(s.photo)} alt={s.alt} label={s.label} size="1600×2000" ratio="4 / 5" tone={s.tone} parallax={0.12} />
             <div class="craft__text" data-reveal="up">
               <span class="craft__num">/0{i + 1}</span>
               <h3>{s.title}</h3>

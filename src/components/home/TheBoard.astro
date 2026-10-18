@@ -1,5 +1,6 @@
 ---
 import Media from '../Media.astro';
+import { photo } from '../../data/photos';
 
 const pillars = [
   { title: 'Focus under pressure', body: 'Hold your attention steady while every sense asks you to move.' },
@@ -13,7 +14,9 @@ const pillars = [
   <div class="container board-intro__grid">
     <Media
       class="board-intro__media"
-      label="Lifestyle — bare feet on the board"
+      src={photo('feet-on-stone')}
+      alt="Bare feet standing on a dark stone floor in cold morning light"
+      label="Lifestyle — bare feet, grounded"
       size="1600×2000"
       ratio="4 / 5"
       tone="stone"

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Media from '../components/Media.astro';
+import { photo } from '../data/photos';
 import Mark from '../components/Mark.astro';
 import Marquee from '../components/Marquee.astro';
 import CtaBand from '../components/home/CtaBand.astro';
@@ -34,10 +35,25 @@ import { philosophy, site } from '../data/site';
     </div>
   </section>
 
+  <section class="band theme-dark">
+    <div class="container">
+      <Media
+        src={photo('ukemi-fall')}
+        alt="A judoka in a dark gi caught mid-breakfall in an empty dojo"
+        label="Ukemi — judoka in a breakfall"
+        size="2400×1600"
+        ratio="16 / 8"
+        tone="ice"
+        parallax={0.16}
+        sizes="(min-width: 1440px) 1340px, 100vw"
+      />
+    </div>
+  </section>
+
   <section class="section theme-light">
     <div class="container symbol">
       <div class="symbol__mark" data-reveal="fade">
-        <Mark textured label="The UKEMI symbol" />
+        <Mark label="The UKEMI symbol" width={460} />
       </div>
       <div class="symbol__text">
         <span class="eyebrow">The symbol</span>
@@ -78,7 +94,7 @@ import { philosophy, site } from '../data/site';
 
   <section class="section theme-dark">
     <div class="container founder">
-      <Media label="Founder portrait" size="1600×2000" ratio="4 / 5" tone="stone" parallax={0.12} />
+      <Media src={photo('founder')} alt="UKEMI founder" label="Founder portrait" size="1600×2000" ratio="4 / 5" tone="stone" parallax={0.12} />
       <div class="founder__text">
         <span class="eyebrow">The founder</span>
         <h2 data-split>Why UKEMI exists.</h2>
@@ -94,6 +110,11 @@ import { philosophy, site } from '../data/site';
 </BaseLayout>
 
 <style>
+  .band {
+    padding-bottom: var(--section-y);
+    background: var(--bg);
+  }
+
   .meaning {
     display: grid;
     gap: 3rem;

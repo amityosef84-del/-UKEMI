@@ -1,44 +1,41 @@
 import { gsap } from 'gsap';
-import { SplitText } from 'gsap/SplitText';
 
-/** Opening sequence: the mark assembles (ice, stone, nail, sprout), then the wordmark settles. */
+/** Opening sequence: the emblem surfaces from the dark, light crosses the metal, the wordmark opens. */
 export function initHero() {
   const hero = document.querySelector<HTMLElement>('[data-hero]');
-  const mark = hero?.querySelector<SVGSVGElement>('.hero__mark');
-  if (!hero || !mark) return;
+  const emblem = hero?.querySelector<HTMLElement>('.hero__emblem');
+  if (!hero || !emblem) return;
 
-  const ice = mark.querySelector('.mark-ice');
-  const stone = mark.querySelector('.mark-stone');
-  const nail = mark.querySelector('.mark-nail');
-  const stem = mark.querySelector<SVGPathElement>('.mark-stem');
-  const leaves = mark.querySelectorAll<SVGGElement>('.mark-leaf');
-  const word = hero.querySelector<HTMLElement>('.hero__word');
+  const shine = hero.querySelector('.hero__shine');
+  const word = hero.querySelector('.hero__word');
+  const glow = hero.querySelector('.hero__glow');
   const tagline = hero.querySelector('.hero__tagline');
   const foot = hero.querySelector('.hero__foot');
   const stage = hero.querySelector('.hero__stage');
 
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.2 });
-  tl.set([mark, word, tagline, foot], { visibility: 'visible' });
+  tl.set([emblem, word, tagline, foot], { visibility: 'visible' })
+    .from(glow, { opacity: 0, scale: 0.6, duration: 2.6 }, 0)
+    .from(emblem, { opacity: 0, scale: 0.78, y: 40, filter: 'blur(18px)', duration: 2.2, clearProps: 'filter' }, 0.1)
+    .fromTo(shine, { backgroundPosition: '160% 0' }, { backgroundPosition: '-60% 0', duration: 1.6, ease: 'power2.inOut' }, 1.1)
+    .fromTo(
+      word,
+      { clipPath: 'inset(0% 50% 0% 50%)', opacity: 0, filter: 'blur(8px)' },
+      { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, filter: 'blur(0px)', duration: 1.9, clearProps: 'filter' },
+      0.9,
+    )
+    .from(tagline, { opacity: 0, y: 16, duration: 1.2 }, 1.7)
+    .from(foot, { opacity: 0, y: 16, duration: 1.2 }, 2);
 
-  tl.from(ice, { rotation: -32, x: -24, opacity: 0, svgOrigin: '100 196', duration: 2 }, 0)
-    .from(stone, { rotation: 32, x: 24, opacity: 0, svgOrigin: '100 196', duration: 2 }, 0)
-    .from(nail, { y: -70, opacity: 0, duration: 1.3, ease: 'power4.out' }, 0.55);
-
-  if (stem) {
-    const len = stem.getTotalLength();
-    tl.fromTo(stem, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, 1.1);
-  }
-  leaves.forEach((leaf, i) => {
-    tl.from(leaf, { scale: 0, svgOrigin: leaf.dataset.origin, duration: 0.9, ease: 'back.out(2.2)' }, 1.5 + i * 0.1);
+  // After the intro: the emblem breathes, and light crosses it again now and then.
+  tl.add(() => {
+    gsap.to(emblem, { y: -8, duration: 3.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    gsap.fromTo(
+      shine,
+      { backgroundPosition: '160% 0' },
+      { backgroundPosition: '-60% 0', duration: 1.8, ease: 'power2.inOut', repeat: -1, repeatDelay: 6 },
+    );
   });
-
-  if (word) {
-    const { chars } = SplitText.create(word, { type: 'chars' });
-    tl.from(chars, { yPercent: 60, opacity: 0, duration: 1.4, stagger: 0.07 }, 1)
-      .from(word, { letterSpacing: '0.62em', duration: 2.4 }, 1);
-  }
-
-  tl.from(tagline, { opacity: 0, y: 16, duration: 1.2 }, 1.8).from(foot, { opacity: 0, y: 16, duration: 1.2 }, 2.1);
 
   // Leaving the hero: the stage drifts up and recedes.
   if (stage) {

@@ -9,7 +9,7 @@ const { class: className } = Astro.props;
 ---
 
 <a href="/" class:list={['logo', className]} aria-label="UKEMI — home">
-  <Mark class="logo__mark" />
+  <Mark class="logo__mark" width={32} eager />
   <span class="logo__word" aria-hidden="true">UKEMI</span>
 </a>
 

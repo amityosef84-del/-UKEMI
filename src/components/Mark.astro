@@ -1,137 +1,39 @@
 ---
 /**
- * UKEMI brand mark — vector rendition of the logo symbol:
- * a fractured crescent (ice + stone), a nail through its centre and a sprout of growth.
- * Interim vector until the official logo files arrive (see docs/BRAND-INPUT.md).
- * Parts carry classes (.mark-ice, .mark-stone, .mark-nail, .mark-stem, .mark-leaf)
- * so the motion engine can assemble the mark piece by piece.
+ * UKEMI brand symbol — the original logo artwork (fractured ice/stone crescent, nail, sprout),
+ * cut out from its backdrop (see brand-assets/logo/matte.py). Served as responsive WebP.
  */
+import { Image } from 'astro:assets';
+import symbol from '../assets/brand/ukemi-symbol.png';
+
 interface Props {
-  /** Adds the stone/ice surface texture — use for large renders only. */
-  textured?: boolean;
   /** Accessible name. Omit for a purely decorative mark. */
   label?: string;
+  /** Rendered CSS width in px — used to pick image sizes. */
+  width?: number;
+  eager?: boolean;
   class?: string;
-  [key: `data-${string}`]: string | boolean | undefined;
 }
 
-const { textured = false, label, class: className, ...attrs } = Astro.props;
-const uid = `mk${Math.random().toString(36).slice(2, 8)}`;
-const id = (name: string) => `${uid}-${name}`;
-const leaf = 'M0 0 C5 -7.5 17 -9.5 25 -4 C17 3.5 6 4 0 0 Z';
-const rib = 'M1.5 -0.4 C9 -3 16 -4.2 22.5 -4';
-const leaves = [
-  { o: '99.4 104', t: 'rotate(-148) scale(1.08)' },
-  { o: '100.4 99', t: 'rotate(-32) scale(1.08)' },
-  { o: '99.2 126', t: 'rotate(-160) scale(.86)' },
-  { o: '100.6 121', t: 'rotate(-20) scale(.86)' },
-];
+const { label, width = 300, eager = false, class: className } = Astro.props;
 ---
 
-<svg
+<Image
+  src={symbol}
+  alt={label ?? ''}
+  width={Math.min(width, symbol.width)}
+  densities={[1, 2]}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding="async"
   class:list={['mark', className]}
-  viewBox="0 0 200 220"
-  xmlns="http://www.w3.org/2000/svg"
-  role={label ? 'img' : undefined}
-  aria-label={label}
   aria-hidden={label ? undefined : 'true'}
-  focusable="false"
-  {...attrs}
->
-  <defs>
-    <linearGradient id={id('ice')} x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#D5D6D8"></stop>
-      <stop offset=".35" stop-color="#8fb0c2"></stop>
-      <stop offset=".7" stop-color="#6E8D9F"></stop>
-      <stop offset="1" stop-color="#344A59"></stop>
-    </linearGradient>
-    <linearGradient id={id('stone')} x1="1" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#e2e2e0"></stop>
-      <stop offset=".45" stop-color="#9CA1A4"></stop>
-      <stop offset="1" stop-color="#565B5E"></stop>
-    </linearGradient>
-    <linearGradient id={id('steel')} x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#565B5E"></stop>
-      <stop offset=".45" stop-color="#D5D6D8"></stop>
-      <stop offset=".6" stop-color="#9CA1A4"></stop>
-      <stop offset="1" stop-color="#3b4044"></stop>
-    </linearGradient>
-    <linearGradient id={id('leaf')} x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#6D8F2A"></stop>
-      <stop offset="1" stop-color="#9dbd5a"></stop>
-    </linearGradient>
-    {
-      textured && (
-        <filter id={id('rock')} x="-5%" y="-5%" width="110%" height="110%">
-          <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4" result="n" />
-          <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.15" result="a" />
-          <feComposite in="SourceGraphic" in2="a" operator="in" result="t" />
-          <feBlend in="t" in2="SourceGraphic" mode="multiply" />
-        </filter>
-      )
-    }
-    <path
-      id={id('half')}
-      d="M99.4 193 L91.6 183.6 A80 80 0 0 1 72.6 28.8 L76.4 28.6 L77.6 30.4 L84.1 25.6 C82 33, 68 45, 59.7 54.3 A58 58 0 0 0 100 154 L97.6 160 L100.4 166 L97.8 173 L100.2 180 L99 186 Z"
-    ></path>
-    <g id={id('cracks')} fill="none" stroke-width=".6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M27 72 L33 79 L31 87 L37 93"></path>
-      <path d="M31 87 L24 92"></path>
-      <path d="M22 112 L30 116 L29 125 L35 131"></path>
-      <path d="M29 125 L23 131"></path>
-      <path d="M42 150 L49 147 L54 155 L62 157"></path>
-      <path d="M54 155 L52 163"></path>
-      <path d="M58 47 L63 54 L58 61"></path>
-      <path d="M73 168 L78 161 L86 165 L90 160"></path>
-      <path d="M40 60 L45 66"></path>
-      <path d="M26 98 L33 101"></path>
-      <path d="M60 170 L66 176"></path>
-    </g>
-  </defs>
-
-  <g filter={textured ? `url(#${id('rock')})` : undefined}>
-    <g class="mark-ice">
-      <use href={`#${id('half')}`} fill={`url(#${id('ice')})`}></use>
-      <use href={`#${id('cracks')}`} stroke="#e9f1f5" stroke-opacity=".45"></use>
-    </g>
-    <g class="mark-stone">
-      <g transform="translate(200 0) scale(-1 1)">
-        <use href={`#${id('half')}`} fill={`url(#${id('stone')})`}></use>
-        <use href={`#${id('cracks')}`} stroke="#3b4044" stroke-opacity=".55"></use>
-      </g>
-    </g>
-  </g>
-
-  <g class="mark-nail">
-    <path d="M95 40 L105 40 L103.5 176 L100 206 L96.5 176 Z" fill={`url(#${id('steel')})`}></path>
-    <path d="M83 33.5 Q100 31 117 33.5 L115 40.5 L85 40.5 Z" fill={`url(#${id('steel')})`}></path>
-  </g>
-
-  <g class="mark-sprout">
-    <path
-      class="mark-stem"
-      d="M100 158 C98.6 140 101.2 120 100 90"
-      fill="none"
-      stroke="#6D8F2A"
-      stroke-width="2.2"
-      stroke-linecap="round"></path>
-    {
-      leaves.map((l) => (
-        <g class="mark-leaf" data-origin={l.o}>
-          <g transform={`translate(${l.o}) ${l.t}`}>
-            <path d={leaf} fill={`url(#${id('leaf')})`} />
-            <path d={rib} fill="none" stroke="#c4d98f" stroke-opacity=".55" stroke-width=".7" stroke-linecap="round" />
-          </g>
-        </g>
-      ))
-    }
-  </g>
-</svg>
+/>
 
 <style>
   .mark {
     width: 100%;
     height: auto;
-    overflow: visible;
+    user-select: none;
+    -webkit-user-drag: none;
   }
 </style>

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Media from '../components/Media.astro';
+import { photo } from '../data/photos';
 import CtaBand from '../components/home/CtaBand.astro';
 
 const steps = [
@@ -57,7 +58,15 @@ const faq = [
   <section class="section theme-dark">
     <div class="container steps-wrap">
       <div class="steps-wrap__media">
-        <Media label="Practice — person standing on the board, calm interior" size="1600×2000" ratio="4 / 5" tone="ice" parallax={0.14} />
+        <Media
+          src={photo('stillness')}
+          alt="A man standing still with eyes closed in a dark, quiet room"
+          label="Practice — stillness, eyes closed"
+          size="1600×2000"
+          ratio="4 / 5"
+          tone="ice"
+          parallax={0.14}
+        />
       </div>
       <div>
         <header class="section-head">
@@ -78,6 +87,21 @@ const faq = [
           }
         </ol>
       </div>
+    </div>
+  </section>
+
+  <section class="band theme-dark">
+    <div class="container">
+      <Media
+        src={photo('meditation')}
+        alt="A woman meditating cross-legged in a vast, dark room lit by a tall window"
+        label="Atmosphere — meditation, wide"
+        size="2688×1520"
+        ratio="16 / 7"
+        tone="ice"
+        parallax={0.16}
+        sizes="(min-width: 1440px) 1340px, 100vw"
+      />
     </div>
   </section>
 
@@ -151,6 +175,11 @@ const faq = [
 </BaseLayout>
 
 <style>
+  .band {
+    padding-bottom: var(--section-y);
+    background: var(--bg);
+  }
+
   .steps-wrap {
     display: grid;
     gap: clamp(3rem, 2rem + 4vw, 6rem);

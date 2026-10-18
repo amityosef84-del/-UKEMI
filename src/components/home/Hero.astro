@@ -1,7 +1,13 @@
 ---
+import { Image, getImage } from 'astro:assets';
 import Mark from '../Mark.astro';
 import NailField from '../NailField.astro';
 import { site } from '../../data/site';
+import symbol from '../../assets/brand/ukemi-symbol.png';
+import wordmark from '../../assets/brand/ukemi-wordmark.png';
+
+// Small WebP of the symbol, used as the mask for the light sweep.
+const shineMask = await getImage({ src: symbol, width: 300, format: 'webp' });
 ---
 
 <section class="hero theme-dark" data-hero>
@@ -9,9 +15,15 @@ import { site } from '../../data/site';
   <div class="hero__glow" aria-hidden="true"></div>
 
   <div class="hero__stage container">
-    <Mark textured class="hero__mark" />
+    <div class="hero__emblem">
+      <Mark class="hero__mark" width={300} eager />
+      <span
+        class="hero__shine"
+        style={`-webkit-mask-image: url(${shineMask.src}); mask-image: url(${shineMask.src})`}
+        aria-hidden="true"></span>
+    </div>
     <h1 class="hero__title">
-      <span class="hero__word">UKEMI</span>
+      <Image src={wordmark} alt="UKEMI" width={560} densities={[1, 2]} loading="eager" class="hero__word" />
       <span class="visually-hidden"> — sadhu boards</span>
     </h1>
     <p class="hero__tagline">{site.tagline}</p>
@@ -63,37 +75,39 @@ import { site } from '../../data/site';
     will-change: transform, opacity;
   }
 
+  .hero__emblem {
+    position: relative;
+    width: clamp(150px, 21vw, 280px);
+  }
+
   .hero :global(.hero__mark) {
-    width: clamp(150px, 22vw, 290px);
-    filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.55));
+    filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.6));
+  }
+
+  /* A band of light that crosses the metal once the emblem lands — clipped to the logo's shape */
+  .hero__shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 38%, rgba(235, 244, 250, 0.75) 50%, transparent 62%) 160% 0 / 260% 100% no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
   }
 
   .hero__title {
-    margin-top: clamp(0.5rem, 2vw, 1.5rem);
-    font-size: inherit;
-    line-height: 1;
+    margin-top: clamp(0.75rem, 2vw, 1.5rem);
+    line-height: 0;
   }
 
-  .hero__word {
-    display: inline-block;
-    font-family: var(--font-display);
-    font-stretch: var(--wordmark-stretch);
-    font-weight: 600;
-    font-size: clamp(2.75rem, 1rem + 8vw, 7.5rem);
-    letter-spacing: 0.3em;
-    margin-right: -0.3em;
-    line-height: 1;
-    background: linear-gradient(180deg, #f4f5f6 0%, var(--frost) 40%, var(--stone) 78%, var(--steel) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  /* SplitText wraps letters in their own boxes — keep the metal gradient on each */
-  .hero__word :global(div) {
-    background: inherit;
-    -webkit-background-clip: text;
-    background-clip: text;
+  .hero :global(.hero__word) {
+    width: clamp(220px, 40vw, 560px);
+    height: auto;
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.5));
   }
 
   .hero__tagline {
@@ -164,8 +178,8 @@ import { site } from '../../data/site';
   }
 
   /* Hidden until the intro timeline reveals them */
-  :global(html.motion) .hero :global(.hero__mark),
-  :global(html.motion) .hero__word,
+  :global(html.motion) .hero__emblem,
+  :global(html.motion) .hero :global(.hero__word),
   :global(html.motion) .hero__tagline,
   :global(html.motion) .hero__foot {
     visibility: hidden;
